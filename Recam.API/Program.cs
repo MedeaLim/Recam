@@ -1,13 +1,21 @@
 using Microsoft.EntityFrameworkCore;
+using Recam.Common;
 using Recam.DataAccess.Context;
+using Recam.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Console.WriteLine(builder.Configuration.GetConnectionString("DefaultConnection"));
-
+// SQL Server
 builder.Services.AddDbContext<RecamDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// MongoDB
+builder.Services.Configure<MongoDbSettings>(
+    builder.Configuration.GetSection("MongoDbSettings"));
+
+builder.Services.AddSingleton<MongoDbService>();
+
+// Controllers
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -24,6 +32,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapControllers();
+
 app.MapGet("/", () => Results.Redirect("/swagger"));
 
 app.Run();
