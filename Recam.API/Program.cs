@@ -1,4 +1,13 @@
+using Recam.Common;
+using Recam.Services;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<MongoDbSettings>(
+    builder.Configuration.GetSection("MongoDbSettings"));
+
+    
+builder.Services.AddSingleton<MongoDbService>();
 
 // Add services to the container
 builder.Services.AddControllers();
