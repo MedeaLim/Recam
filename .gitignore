@@ -1,0 +1,16 @@
+# .NET build
+bin/
+obj/
+
+# user files
+*.user
+*.suo
+
+# VSCode
+.vscode/
+
+# logs
+*.log
+
+# OS
+.DS_Store
