@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Recam.Common;
 
@@ -7,10 +8,12 @@ public class MongoDbService
 {
     private readonly IMongoDatabase _database;
 
-    public MongoDbService(MongoDbSettings settings)
+    public MongoDbService(IOptions<MongoDbSettings> settings)
     {
-        var client = new MongoClient(settings.ConnectionString);
-        _database = client.GetDatabase(settings.DatabaseName);
+        var mongoSettings = settings.Value;
+
+        var client = new MongoClient(mongoSettings.ConnectionString);
+        _database = client.GetDatabase(mongoSettings.DatabaseName);
     }
 
     public IMongoDatabase GetDatabase()
