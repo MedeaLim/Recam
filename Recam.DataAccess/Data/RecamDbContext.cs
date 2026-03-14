@@ -1,9 +1,10 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Recam.Models.Entities;
 
 namespace Recam.DataAccess.Data;
 
-public class RecamDbContext : DbContext
+public class RecamDbContext : IdentityDbContext<ApplicationUser>
 {
     public RecamDbContext(DbContextOptions<RecamDbContext> options)
         : base(options)
