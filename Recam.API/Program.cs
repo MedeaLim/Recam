@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Recam.Common;
-using Recam.DataAccess.Context;
+using Recam.DataAccess.Data;
 using Recam.Services;
 
 var builder = WebApplication.CreateBuilder(args);

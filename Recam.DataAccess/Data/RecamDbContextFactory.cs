@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Recam.DataAccess.Context;
+using Recam.DataAccess.Data;
 
 namespace Recam.DataAccess;
 
