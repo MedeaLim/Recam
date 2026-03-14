@@ -1,3 +1,6 @@
+using Recam.API.Data;
+using Microsoft.AspNetCore.Identity;
+using Recam.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using Recam.Common;
 using Recam.DataAccess.Data;
@@ -16,6 +19,10 @@ builder.Services.AddCors(options =>
                   .AllowAnyHeader();
         });
 });
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<RecamDbContext>()
+    .AddDefaultTokenProviders();
 
 // SQL Server
 builder.Services.AddDbContext<RecamDbContext>(options =>
@@ -49,5 +56,12 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    await RoleSeeder.SeedRolesAsync(roleManager);
+}
 
 app.Run();
