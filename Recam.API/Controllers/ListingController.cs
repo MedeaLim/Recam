@@ -56,4 +56,12 @@ public class ListingController : ControllerBase
         await _listingService.DeleteListingAsync(id);
         return Ok();
     }
+
+
+    [HttpPatch("{id}/status")]
+    public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] string status)
+    {
+        await _listingService.UpdateStatusAsync(id, status);
+        return Ok();
+    }
 }
