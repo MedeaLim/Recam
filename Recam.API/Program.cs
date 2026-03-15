@@ -1,32 +1,61 @@
-using Recam.API.Data;
+using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Identity;
-using Recam.Models.Entities;
 using Microsoft.EntityFrameworkCore;
-using Recam.Common;
-using Recam.DataAccess.Data;
-using Recam.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+
+using Recam.Models.Entities;
+using Recam.Common;
+using Recam.DataAccess.Data;
+using Recam.Services;
 using Recam.Services.Interfaces;
 using Recam.Services.Services;
+using Recam.API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-var jwtSettings = builder.Configuration.GetSection("Jwt");
-var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
 
+// JWT settings
+var jwtSettings = builder.Configuration.GetSection("Jwt");
+var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
+
+
+// ============================
 // CORS
+// ============================
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:5173")
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
-        });
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
 
+
+// ============================
+// Database
+// ============================
+
+builder.Services.AddDbContext<RecamDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+// ============================
+// Identity
+// ============================
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<RecamDbContext>()
+    .AddDefaultTokenProviders();
+
+
+// ============================
+// JWT Authentication
+// ============================
 
 builder.Services.AddAuthentication(options =>
 {
@@ -48,32 +77,79 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<RecamDbContext>()
-    .AddDefaultTokenProviders();
 
-// SQL Server
-builder.Services.AddDbContext<RecamDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+// ============================
 // MongoDB
+// ============================
+
 builder.Services.Configure<MongoDbSettings>(
     builder.Configuration.GetSection("MongoDbSettings"));
 
 builder.Services.AddSingleton<MongoDbService>();
 
-// Controllers
-builder.Services.AddControllers();
 
+// ============================
+// Controllers
+// ============================
+
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+
+// ============================
+// Swagger
+// ============================
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Recam API",
+        Version = "v1"
+    });
+
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "Enter JWT token: {your token}",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Id = "Bearer",
+                    Type = ReferenceType.SecurityScheme
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
+
+// ============================
+// Services
+// ============================
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<JwtTokenService>();
 
+
 var app = builder.Build();
 
-// 启用 CORS
+
+// ============================
+// Middleware
+// ============================
+
 app.UseCors("AllowFrontend");
 
 if (app.Environment.IsDevelopment())
@@ -84,16 +160,17 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
 app.UseAuthentication();
 app.UseAuthorization();
-
-
 
 app.MapControllers();
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
 
+
+// ============================
+// Seed Roles
+// ============================
 
 using (var scope = app.Services.CreateScope())
 {
