@@ -37,4 +37,16 @@ public class ListingService : IListingService
     {
         await _listingRepository.DeleteAsync(id);
     }
+
+    public async Task UpdateStatusAsync(Guid id, string status)
+    {
+    var listing = await _listingRepository.GetByIdAsync(id);
+
+    if (listing == null)
+        throw new Exception("Listing not found");
+
+    listing.Status = status;
+
+    await _listingRepository.UpdateAsync(listing);
+    }
 }

@@ -19,6 +19,7 @@ public class RecamDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<StatusHistory> StatusHistories { get; set; }
 
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
 {
     base.OnModelCreating(modelBuilder);
