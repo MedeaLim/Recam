@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Recam.Models.Entities;
 using Recam.Services.DTOs;
 using Recam.Services.Interfaces;
+using AutoMapper;
 
 namespace Recam.Services.Services;
 
@@ -9,30 +10,29 @@ public class AuthService : IAuthService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly JwtTokenService _jwtTokenService;
+    private readonly IMapper _mapper;
 
     public AuthService(
         UserManager<ApplicationUser> userManager,
-        JwtTokenService jwtTokenService)
+        JwtTokenService jwtTokenService,
+        IMapper mapper)
     {
         _userManager = userManager;
         _jwtTokenService = jwtTokenService;
+        _mapper = mapper;
     }
 
     // Register new user
     public async Task<bool> RegisterAsync(RegisterRequest request)
     {
-        var user = new ApplicationUser
-        {
-            UserName = request.Email,
-            Email = request.Email
-        };
+        var user = _mapper.Map<ApplicationUser>(request);
 
         var result = await _userManager.CreateAsync(user, request.Password);
 
         if (!result.Succeeded)
             return false;
 
-        // Assign default role to new user
+        // Assign default role
         await _userManager.AddToRoleAsync(user, "Agent");
 
         return true;
@@ -51,7 +51,6 @@ public class AuthService : IAuthService
         if (!validPassword)
             return null;
 
-        // Generate JWT token
         return await _jwtTokenService.GenerateToken(user);
     }
 }
