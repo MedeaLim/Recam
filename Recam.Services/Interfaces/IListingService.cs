@@ -13,4 +13,6 @@ public interface IListingService
     Task UpdateListingAsync(ListingCase listing);
 
     Task DeleteListingAsync(Guid id);
+
+    Task UpdateStatusAsync(Guid id, string status);
 }
