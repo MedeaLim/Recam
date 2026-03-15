@@ -1,4 +1,8 @@
+using Recam.Models.Enums;
+
 namespace Recam.Models.Entities;
+
+
 
 public class ListingCase
 {
@@ -6,9 +10,9 @@ public class ListingCase
 
     public string Address { get; set; } = string.Empty;
 
-    public string PropertyStatus { get; set; } = string.Empty;
+    public PropertyStatus PropertyStatus { get; set; }
 
-    public string PropertyType { get; set; } = string.Empty;
+    public PropertyType PropertyType { get; set; }
 
     public int Bedrooms { get; set; }
 

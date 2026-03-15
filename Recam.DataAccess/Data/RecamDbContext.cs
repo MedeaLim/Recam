@@ -17,7 +17,15 @@ public class RecamDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Agent> Agents { get; set; }
 
-    public DbSet<User> Users { get; set; }
-
     public DbSet<StatusHistory> StatusHistories { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    base.OnModelCreating(modelBuilder);
+
+    modelBuilder.Entity<ListingCase>()
+        .Property(l => l.Price)
+        .HasPrecision(18, 2);
 }
+}
+
