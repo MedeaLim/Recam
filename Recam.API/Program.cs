@@ -16,6 +16,7 @@ using Recam.API.Data;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Recam.Services.Validators;
+using Recam.Services.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -92,6 +93,8 @@ builder.Services.Configure<MongoDbSettings>(
 builder.Services.AddSingleton<MongoDbService>();
 
 
+
+
 // ============================
 // Controllers
 // ============================
@@ -101,6 +104,8 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
+
+builder.Services.AddAutoMapper(typeof(AuthMappingProfile));
 // ============================
 // Swagger
 // ============================
