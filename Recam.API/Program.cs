@@ -176,6 +176,16 @@ using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     await RoleSeeder.SeedRolesAsync(roleManager);
+
+
+    // var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+    // var user = await userManager.FindByEmailAsync("123123@gmail.com");
+
+    // if (user != null)
+    // {
+    //     await userManager.AddToRoleAsync(user, "Admin");
+    // }
 }
 
 app.Run();
