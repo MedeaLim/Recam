@@ -13,6 +13,10 @@ using Recam.Services.Interfaces;
 using Recam.Services.Services;
 using Recam.API.Data;
 
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Recam.Services.Validators;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // JWT settings
@@ -95,7 +99,8 @@ builder.Services.AddSingleton<MongoDbService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
 // ============================
 // Swagger
 // ============================
