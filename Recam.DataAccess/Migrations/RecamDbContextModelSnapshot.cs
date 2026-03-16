@@ -327,9 +327,6 @@ namespace Recam.DataAccess.Migrations
                     b.Property<Guid>("ListingCaseId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ListingId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("MediaType")
                         .HasColumnType("int");
 

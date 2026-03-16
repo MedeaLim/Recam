@@ -19,6 +19,8 @@ using Recam.Services.Validators;
 using Recam.Services.Mappings;
 using Recam.Repository.Interfaces;
 using Recam.Repository.Repositories;
+using Recam.Service.Interfaces;
+using Recam.Service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -116,6 +118,8 @@ builder.Services.AddAutoMapper(typeof(AuthMappingProfile));
 
 builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<IMediaStorageService, LocalMediaStorageService>();
+
+builder.Services.AddScoped<IMediaService, MediaService>();
 
 // ============================
 // Swagger
