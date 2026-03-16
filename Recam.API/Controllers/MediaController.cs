@@ -6,7 +6,6 @@ using Recam.Service.Interfaces;
 namespace Recam.API.Controllers;
 
 [ApiController]
-[Route("listings/{listingId}/media")]
 public class MediaController : ControllerBase
 {
     private readonly IMediaService _mediaService;
@@ -16,7 +15,7 @@ public class MediaController : ControllerBase
         _mediaService = mediaService;
     }
 
-    [HttpPost]
+    [HttpPost("listings/{listingId}/media")]
     public async Task<IActionResult> UploadMedia(
         Guid listingId,
         IFormFile file,
@@ -35,5 +34,29 @@ public class MediaController : ControllerBase
         var result = await _mediaService.UploadMediaAsync(listingId, dto);
 
         return Ok(result);
+    }
+
+    [HttpGet("listings/{listingId}/media")]
+    public async Task<IActionResult> GetListingMedia(Guid listingId)
+    {
+        var media = await _mediaService.GetMediaByListingIdAsync(listingId);
+
+        return Ok(media);
+    }
+
+    [HttpGet("media")]
+    public async Task<IActionResult> GetAllMedia()
+    {
+        var media = await _mediaService.GetAllMediaAsync();
+
+        return Ok(media);
+    }
+
+    [HttpDelete("media/{id}")]
+    public async Task<IActionResult> DeleteMedia(Guid id)
+    {
+        await _mediaService.DeleteMediaAsync(id);
+
+        return NoContent();
     }
 }

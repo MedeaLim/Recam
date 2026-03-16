@@ -120,6 +120,7 @@ builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<IMediaStorageService, LocalMediaStorageService>();
 
 builder.Services.AddScoped<IMediaService, MediaService>();
+builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 
 // ============================
 // Swagger
