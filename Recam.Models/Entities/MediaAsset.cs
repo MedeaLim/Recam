@@ -6,17 +6,15 @@ public class MediaAsset
 {
     public Guid Id { get; set; }
 
-    public Guid ListingId { get; set; }
+    public Guid ListingCaseId { get; set; }
 
-    public ListingCase ListingCase { get; set; }
+    public string FileName { get; set; }
 
-    public string FileName { get; set; } = string.Empty;
+    public string OriginalFileName { get; set; }
 
-    public string OriginalFileName { get; set; } = string.Empty;
+    public string StoragePath { get; set; }
 
-    public string StoragePath { get; set; } = string.Empty;
-
-    public string ContentType { get; set; } = string.Empty;
+    public string ContentType { get; set; }
 
     public long FileSize { get; set; }
 
@@ -24,7 +22,9 @@ public class MediaAsset
 
     public bool IsHero { get; set; }
 
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public bool IsDeleted { get; set; } = false;   // ⭐ 必须有这一行
 
-    public bool IsDeleted { get; set; }
+    public DateTime CreatedAt { get; set; }
+
+    public ListingCase ListingCase { get; set; }
 }

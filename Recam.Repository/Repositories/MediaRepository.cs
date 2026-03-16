@@ -17,7 +17,7 @@ public class MediaRepository : IMediaRepository
     public async Task<List<MediaAsset>> GetByListingIdAsync(Guid listingId)
     {
         return await _context.MediaAssets
-            .Where(m => m.ListingId == listingId && !m.IsDeleted)
+            .Where(m => m.ListingCaseId == listingId && !m.IsDeleted)
             .ToListAsync();
     }
 

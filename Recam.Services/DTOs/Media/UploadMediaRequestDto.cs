@@ -4,11 +4,11 @@ namespace Recam.Service.DTOs.Media;
 
 public class UploadMediaRequestDto
 {
-    public Stream FileStream { get; set; } = default!;
+    public Stream FileStream { get; set; }
 
-    public string FileName { get; set; } = string.Empty;
+    public string FileName { get; set; }
 
-    public string ContentType { get; set; } = string.Empty;
+    public string ContentType { get; set; }
 
     public MediaType MediaType { get; set; }
 
