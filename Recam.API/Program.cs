@@ -111,7 +111,10 @@ builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>()
 
 builder.Services.AddScoped<IListingService, ListingService>();
 builder.Services.AddScoped<IListingRepository, ListingRepository>();
+
 builder.Services.AddAutoMapper(typeof(AuthMappingProfile));
+
+builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 
 // ============================
 // Swagger
