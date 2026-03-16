@@ -115,6 +115,7 @@ builder.Services.AddScoped<IListingRepository, ListingRepository>();
 builder.Services.AddAutoMapper(typeof(AuthMappingProfile));
 
 builder.Services.AddScoped<IMediaRepository, MediaRepository>();
+builder.Services.AddScoped<IMediaStorageService, LocalMediaStorageService>();
 
 // ============================
 // Swagger
