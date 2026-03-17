@@ -11,6 +11,9 @@ public class MediaService : IMediaService
     private readonly IMediaRepository _mediaRepository;
     private readonly IMediaStorageService _storageService;
 
+    // ⚠️ 先写死，后面可以放 config
+    private readonly string _baseUrl = "https://localhost:5001";
+
     public MediaService(
         IMediaRepository mediaRepository,
         IMediaStorageService storageService)
@@ -47,9 +50,8 @@ public class MediaService : IMediaService
         return new MediaResponseDto
         {
             Id = media.Id,
-            FileName = media.FileName,
-            MediaType = media.MediaType,
-            StoragePath = media.StoragePath
+            Url = $"{_baseUrl}/{media.StoragePath}",
+            MediaType = media.MediaType.ToString()
         };
     }
 
@@ -57,26 +59,30 @@ public class MediaService : IMediaService
     {
         var mediaList = await _mediaRepository.GetByListingIdAsync(listingId);
 
-        return mediaList.Select(m => new MediaResponseDto
-        {
-            Id = m.Id,
-            FileName = m.FileName,
-            MediaType = m.MediaType,
-            StoragePath = m.StoragePath
-        }).ToList();
+        return mediaList
+            .Where(m => !m.IsDeleted) // ✅ 过滤软删除
+            .Select(m => new MediaResponseDto
+            {
+                Id = m.Id,
+                Url = $"{_baseUrl}/{m.StoragePath}",
+                MediaType = m.MediaType.ToString()
+            })
+            .ToList();
     }
 
     public async Task<List<MediaResponseDto>> GetAllMediaAsync()
     {
         var mediaList = await _mediaRepository.GetAllAsync();
 
-        return mediaList.Select(m => new MediaResponseDto
-        {
-            Id = m.Id,
-            FileName = m.FileName,
-            MediaType = m.MediaType,
-            StoragePath = m.StoragePath
-        }).ToList();
+        return mediaList
+            .Where(m => !m.IsDeleted) // ✅ 同样过滤
+            .Select(m => new MediaResponseDto
+            {
+                Id = m.Id,
+                Url = $"{_baseUrl}/{m.StoragePath}",
+                MediaType = m.MediaType.ToString()
+            })
+            .ToList();
     }
 
     public async Task DeleteMediaAsync(Guid mediaId)

@@ -1,14 +1,10 @@
-using Recam.Models.Enums;
-
 namespace Recam.Service.DTOs.Media;
 
 public class MediaResponseDto
 {
     public Guid Id { get; set; }
 
-    public string FileName { get; set; }
+    public string Url { get; set; } = default!;
 
-    public MediaType MediaType { get; set; }
-
-    public string StoragePath { get; set; }
+    public string MediaType { get; set; } = default!;
 }
