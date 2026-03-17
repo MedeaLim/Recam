@@ -21,6 +21,7 @@ using Recam.Repository.Interfaces;
 using Recam.Repository.Repositories;
 using Recam.Service.Interfaces;
 using Recam.Service.Services;
+using Recam.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -186,6 +187,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
