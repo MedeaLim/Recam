@@ -116,7 +116,6 @@ builder.Services.AddScoped<IListingRepository, ListingRepository>();
 
 builder.Services.AddAutoMapper(typeof(AuthMappingProfile));
 
-builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<IMediaStorageService, LocalMediaStorageService>();
 
 builder.Services.AddScoped<IMediaService, MediaService>();
@@ -200,8 +199,13 @@ app.MapGet("/", () => Results.Redirect("/swagger"));
 
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var services = scope.ServiceProvider;
+
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
     await RoleSeeder.SeedRolesAsync(roleManager);
+    await UserSeeder.SeedUsersAsync(userManager, roleManager);
 
 
     // var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();

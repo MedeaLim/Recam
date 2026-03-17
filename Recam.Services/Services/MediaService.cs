@@ -52,4 +52,40 @@ public class MediaService : IMediaService
             StoragePath = media.StoragePath
         };
     }
+
+    public async Task<List<MediaResponseDto>> GetMediaByListingIdAsync(Guid listingId)
+    {
+        var mediaList = await _mediaRepository.GetByListingIdAsync(listingId);
+
+        return mediaList.Select(m => new MediaResponseDto
+        {
+            Id = m.Id,
+            FileName = m.FileName,
+            MediaType = m.MediaType,
+            StoragePath = m.StoragePath
+        }).ToList();
+    }
+
+    public async Task<List<MediaResponseDto>> GetAllMediaAsync()
+    {
+        var mediaList = await _mediaRepository.GetAllAsync();
+
+        return mediaList.Select(m => new MediaResponseDto
+        {
+            Id = m.Id,
+            FileName = m.FileName,
+            MediaType = m.MediaType,
+            StoragePath = m.StoragePath
+        }).ToList();
+    }
+
+    public async Task DeleteMediaAsync(Guid mediaId)
+    {
+        var media = await _mediaRepository.GetByIdAsync(mediaId);
+
+        if (media == null)
+            throw new Exception("Media not found");
+
+        await _mediaRepository.DeleteAsync(media);
+    }
 }
