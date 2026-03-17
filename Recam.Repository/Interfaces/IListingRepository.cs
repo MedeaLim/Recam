@@ -13,4 +13,6 @@ public interface IListingRepository
     Task UpdateAsync(ListingCase listing);
 
     Task DeleteAsync(Guid id);
+
+    Task<List<ListingCase>> GetByAgentIdAsync(string agentId);
 }

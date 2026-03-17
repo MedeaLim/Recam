@@ -46,4 +46,11 @@ public class ListingRepository : IListingRepository
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task<List<ListingCase>> GetByAgentIdAsync(string agentId)
+    {
+        return await _context.ListingCases
+            .Where(l => l.AgentId == agentId)
+            .ToListAsync();
+    }
 }

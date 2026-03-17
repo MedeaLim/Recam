@@ -8,18 +8,24 @@ namespace Recam.API.Controllers;
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
-    private readonly IUserService _userService;
+    private readonly IAuthService _authService;
 
-    public UsersController(IUserService userService)
+    public UsersController(IAuthService authService)
     {
-        _userService = userService;
+        _authService = authService;
     }
 
-    [HttpGet]
-    [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> GetAllUsers()
+    [HttpGet("me")]
+    [Authorize]
+    public async Task<IActionResult> GetCurrentUser()
     {
-        var users = await _userService.GetAllUsersAsync();
-        return Ok(users);
+        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        if (userId == null)
+            return Unauthorized();
+
+        var result = await _authService.GetCurrentUserWithListingsAsync(userId);
+
+        return Ok(result);
     }
 }

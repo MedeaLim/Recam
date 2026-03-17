@@ -3,6 +3,7 @@ using Recam.Models.Entities;
 using Recam.Services.DTOs;
 using Recam.Services.Interfaces;
 using AutoMapper;
+using Recam.Repository.Interfaces;
 
 namespace Recam.Services.Services;
 
@@ -11,15 +12,18 @@ public class AuthService : IAuthService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly JwtTokenService _jwtTokenService;
     private readonly IMapper _mapper;
+    private readonly IListingRepository _listingRepository;
 
     public AuthService(
         UserManager<ApplicationUser> userManager,
         JwtTokenService jwtTokenService,
-        IMapper mapper)
+        IMapper mapper,
+        IListingRepository listingRepository)
     {
         _userManager = userManager;
         _jwtTokenService = jwtTokenService;
         _mapper = mapper;
+        _listingRepository = listingRepository;
     }
 
     // Register new user
@@ -32,7 +36,6 @@ public class AuthService : IAuthService
         if (!result.Succeeded)
             return false;
 
-        // Assign default role
         await _userManager.AddToRoleAsync(user, "Agent");
 
         return true;
@@ -52,5 +55,26 @@ public class AuthService : IAuthService
             return null;
 
         return await _jwtTokenService.GenerateToken(user);
+    }
+
+    // ⭐ 新方法
+    public async Task<CurrentUserResponseDto> GetCurrentUserWithListingsAsync(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+
+        if (user == null)
+            throw new Exception("User not found");
+
+        var roles = await _userManager.GetRolesAsync(user);
+
+        var listings = await _listingRepository.GetByAgentIdAsync(userId);
+
+        return new CurrentUserResponseDto
+        {
+            UserId = user.Id,
+            Email = user.Email,
+            Role = roles.FirstOrDefault(),
+            ListingIds = listings.Select(l => l.Id).ToList()
+        };
     }
 }

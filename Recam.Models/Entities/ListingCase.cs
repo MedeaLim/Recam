@@ -27,4 +27,5 @@ public class ListingCase
     public string Status { get; set; } = "Created";
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public string AgentId { get; set; }
 }
