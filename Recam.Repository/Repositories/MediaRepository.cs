@@ -14,6 +14,13 @@ public class MediaRepository : IMediaRepository
         _context = context;
     }
 
+    public async Task<List<MediaAsset>> GetAllAsync()
+    {
+        return await _context.MediaAssets
+            .Where(m => !m.IsDeleted)
+            .ToListAsync();
+    }
+
     public async Task<List<MediaAsset>> GetByListingIdAsync(Guid listingId)
     {
         return await _context.MediaAssets
