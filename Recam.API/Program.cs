@@ -126,6 +126,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICaseContactRepository, CaseContactRepository>();
 builder.Services.AddScoped<ICaseContactService, CaseContactService>();
 
+builder.Services.AddScoped<IAgentRepository, AgentRepository>();
+builder.Services.AddScoped<IAgentService, AgentService>();
+
 // ============================
 // Swagger
 // ============================
