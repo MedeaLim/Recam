@@ -1,136 +1,183 @@
-# Recam
+🏡 Recam — Real Estate Media Delivery Platform
 
-Recam is a full-stack real estate media management platform.
+A scalable backend system designed to support real estate media workflows, enabling efficient management of property listings, media assets, and agent interactions.
 
-This project demonstrates a modern full-stack architecture using a React frontend and an ASP.NET Core backend with SQL Server and MongoDB.
+Designed and implemented following enterprise-level backend architecture practices.
 
----
+🚀 Overview
 
-# Tech Stack
+Recam provides a structured backend solution for managing real estate data and media delivery processes.
+The system focuses on clean architecture, maintainability, and scalability, supporting multiple user roles and business workflows.
 
-## Frontend
-- React
-- TypeScript
-- Vite
+Key capabilities include:
 
-## Backend
-- ASP.NET Core Web API
-- Entity Framework Core
-- SQL Server
-- MongoDB
+Property listing lifecycle management
 
----
+Media asset handling and organization
 
-# Project Structure
+Agent collaboration and contact management
 
-```
-Recam
-│
-├── Recam.API          # ASP.NET Core Web API
-├── Recam.Services     # Business logic layer
-├── Recam.Repository   # Data access abstraction
-├── Recam.DataAccess   # EF Core + DbContext
-├── Recam.Models       # Domain models
-├── Recam.Common       # Shared configuration classes
-│
-└── frontend           # React frontend application
-```
+Secure authentication and role-based authorization
 
----
+🧱 System Architecture
 
-# Running the Project
+The project follows a layered architecture pattern:
 
-## 1️⃣ Start Backend
+Controller
+↓
+Application Service Layer
+↓
+Domain Logic
+↓
+Repository Layer
+↓
+Data Access (EF Core)
+↓
+SQL Server
+Design Principles
 
-```bash
-cd Recam.API
+Separation of concerns
+
+Dependency Injection (DI)
+
+SOLID principles
+
+Clean layering between business logic and infrastructure
+
+🔐 Authentication & Security
+
+JWT-based authentication
+
+Role-based access control (RBAC)
+
+ASP.NET Identity integration
+
+Secure endpoint protection
+
+📦 Core Modules
+🔹 Authentication & User Management
+
+Handles user identity, authentication, and access control.
+
+🔹 Listing Management
+
+Manages property data and lifecycle transitions.
+
+🔹 Media Management
+
+Handles media upload, storage abstraction, and retrieval.
+
+🔹 Agent Management
+
+Supports agent-related workflows and listing associations.
+
+🗄️ Data Management
+
+Primary database:
+
+SQL Server
+
+Key entities:
+
+User (Identity-based)
+
+ListingCase
+
+MediaAsset
+
+Agent
+
+CaseContact
+
+StatusHistory
+
+⚙️ Technology Stack
+Backend
+
+ASP.NET Core Web API (.NET 8)
+
+Entity Framework Core
+
+SQL Server
+
+Supporting Tools
+
+AutoMapper
+
+FluentValidation
+
+Swagger / OpenAPI
+
+🛠️ Getting Started
+1️⃣ Clone Repository
+git clone https://github.com/your-username/recam.git
+cd recam
+2️⃣ Configure Environment
+
+Update the database connection string in:
+
+appsettings.json
+
+Example:
+
+Server=localhost,1433;Database=RecamDb;User Id=sa;Password=YourPassword;
+3️⃣ Run Database Migration
+dotnet ef database update
+
+If needed, create migration:
+
+dotnet ef migrations add InitialCreate
+4️⃣ Run Backend API
 dotnet run
-```
 
-Backend runs at:
+API will be available at:
 
-```
-http://localhost:5197
-```
+https://localhost:xxxx
 
 Swagger UI:
 
-```
-http://localhost:5197/swagger
-```
+https://localhost:xxxx/swagger
+5️⃣ (Optional) Run Frontend
 
----
+If frontend (React + Vite) is included:
 
-## 2️⃣ Start Frontend
-
-```bash
 cd frontend
 npm install
 npm run dev
-```
+🧩 Development Workflow
 
-Frontend runs at:
+The project follows a structured Git workflow:
 
-```
-http://localhost:5173
-```
+Issue → Branch → Commit → Pull Request → Merge
 
----
+Milestones are used to group related features and track progress.
 
-# API Example
+📈 Project Status
 
-Health check endpoint:
+✅ Authentication & authorization completed
 
-```
-GET /api/health
-```
+✅ Listing management completed
 
-Example response:
+✅ Media management core features implemented
 
-```
-Healthy
-```
+🔄 Agent management in progress
 
----
+⏳ Preview and delivery features planned
 
-# Architecture
+🔮 Future Enhancements
 
-The backend follows a layered architecture:
+Listing preview aggregation layer
 
-```
-Controller
-   ↓
-Services
-   ↓
-Repository
-   ↓
-Database
-```
+Cloud storage integration (e.g., Azure Blob Storage)
 
-This design improves separation of concerns and maintainability.
+Media selection and presentation logic
 
----
+File packaging and delivery
 
-# Development Status
+Unit testing and performance optimization
 
-Milestone 1 Completed:
+👤 Author
 
-- Backend API setup
-- SQL Server integration with Entity Framework Core
-- MongoDB integration
-- Layered backend architecture
-- React frontend setup
-- API communication between frontend and backend
-- Environment configuration
-- Project documentation
-
----
-
-# Future Development
-
-Planned features include:
-
-- Listing management API
-- Image upload and storage
-- React listing pages
-- Authentication and authorization
+Medea Lin
+Bachelor of Advanced Computing — University of Sydney
+Major: Software Development
