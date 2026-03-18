@@ -28,4 +28,6 @@ public class ListingCase
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public string AgentId { get; set; }
+
+    public ICollection<CaseContact> CaseContacts { get; set; } = new List<CaseContact>();
 }

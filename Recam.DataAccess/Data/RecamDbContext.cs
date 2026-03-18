@@ -12,6 +12,7 @@ public class RecamDbContext : IdentityDbContext<ApplicationUser>
     }
 
     public DbSet<ListingCase> ListingCases { get; set; }
+    
 
     public DbSet<MediaAsset> MediaAssets { get; set; }
 
@@ -19,14 +20,22 @@ public class RecamDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<StatusHistory> StatusHistories { get; set; }
 
+    public DbSet<CaseContact> CaseContacts { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+
+protected override void OnModelCreating(ModelBuilder modelBuilder)
 {
     base.OnModelCreating(modelBuilder);
 
     modelBuilder.Entity<ListingCase>()
         .Property(l => l.Price)
         .HasPrecision(18, 2);
+
+    modelBuilder.Entity<CaseContact>()
+        .HasOne(c => c.ListingCase)
+        .WithMany(l => l.CaseContacts)
+        .HasForeignKey(c => c.ListingId)
+        .OnDelete(DeleteBehavior.Cascade);
 }
 }
 
