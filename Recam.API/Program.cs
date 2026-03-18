@@ -123,6 +123,8 @@ builder.Services.AddScoped<IMediaService, MediaService>();
 builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICaseContactRepository, CaseContactRepository>();
+builder.Services.AddScoped<ICaseContactService, CaseContactService>();
 
 // ============================
 // Swagger
