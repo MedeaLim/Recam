@@ -1,183 +1,122 @@
-🏡 Recam — Real Estate Media Delivery Platform
+# 🏡 Recam — Real Estate Media Delivery Platform
 
-A scalable backend system designed to support real estate media workflows, enabling efficient management of property listings, media assets, and agent interactions.
+A scalable backend system for managing real estate listings, media assets, and agent workflows.
 
-Designed and implemented following enterprise-level backend architecture practices.
+---
 
-🚀 Overview
+## 🚀 Quick Start
 
-Recam provides a structured backend solution for managing real estate data and media delivery processes.
-The system focuses on clean architecture, maintainability, and scalability, supporting multiple user roles and business workflows.
+### 1️⃣ Clone the Repository
 
-Key capabilities include:
-
-Property listing lifecycle management
-
-Media asset handling and organization
-
-Agent collaboration and contact management
-
-Secure authentication and role-based authorization
-
-🧱 System Architecture
-
-The project follows a layered architecture pattern:
-
-Controller
-↓
-Application Service Layer
-↓
-Domain Logic
-↓
-Repository Layer
-↓
-Data Access (EF Core)
-↓
-SQL Server
-Design Principles
-
-Separation of concerns
-
-Dependency Injection (DI)
-
-SOLID principles
-
-Clean layering between business logic and infrastructure
-
-🔐 Authentication & Security
-
-JWT-based authentication
-
-Role-based access control (RBAC)
-
-ASP.NET Identity integration
-
-Secure endpoint protection
-
-📦 Core Modules
-🔹 Authentication & User Management
-
-Handles user identity, authentication, and access control.
-
-🔹 Listing Management
-
-Manages property data and lifecycle transitions.
-
-🔹 Media Management
-
-Handles media upload, storage abstraction, and retrieval.
-
-🔹 Agent Management
-
-Supports agent-related workflows and listing associations.
-
-🗄️ Data Management
-
-Primary database:
-
-SQL Server
-
-Key entities:
-
-User (Identity-based)
-
-ListingCase
-
-MediaAsset
-
-Agent
-
-CaseContact
-
-StatusHistory
-
-⚙️ Technology Stack
-Backend
-
-ASP.NET Core Web API (.NET 8)
-
-Entity Framework Core
-
-SQL Server
-
-Supporting Tools
-
-AutoMapper
-
-FluentValidation
-
-Swagger / OpenAPI
-
-🛠️ Getting Started
-1️⃣ Clone Repository
+```bash
 git clone https://github.com/your-username/recam.git
 cd recam
-2️⃣ Configure Environment
+```
 
-Update the database connection string in:
+---
 
-appsettings.json
+### 2️⃣ Configure Database
+
+Edit:
+
+```bash
+Recam.API/appsettings.json
+```
 
 Example:
 
-Server=localhost,1433;Database=RecamDb;User Id=sa;Password=YourPassword;
-3️⃣ Run Database Migration
-dotnet ef database update
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Server=localhost,1433;Database=RecamDb;User Id=sa;Password=YourPassword;TrustServerCertificate=True;Encrypt=False"
+}
+```
 
-If needed, create migration:
+---
 
-dotnet ef migrations add InitialCreate
-4️⃣ Run Backend API
-dotnet run
+### 3️⃣ Apply Migrations
 
-API will be available at:
+```bash
+dotnet ef database update \
+--project Recam.DataAccess \
+--startup-project Recam.API
+```
 
-https://localhost:xxxx
+---
 
-Swagger UI:
+### 4️⃣ Run Backend API
 
+```bash
+dotnet run --project Recam.API
+```
+
+---
+
+### 5️⃣ Open Swagger
+
+```
 https://localhost:xxxx/swagger
-5️⃣ (Optional) Run Frontend
+```
 
-If frontend (React + Vite) is included:
+---
 
+### 6️⃣ Run Frontend (Optional)
+
+```bash
 cd frontend
 npm install
 npm run dev
-🧩 Development Workflow
+```
 
-The project follows a structured Git workflow:
+---
 
-Issue → Branch → Commit → Pull Request → Merge
+## 🧱 Architecture
 
-Milestones are used to group related features and track progress.
+```
+Controller
+↓
+Service Layer
+↓
+Repository Layer
+↓
+EF Core (DbContext)
+↓
+SQL Server
+```
 
-📈 Project Status
+---
 
-✅ Authentication & authorization completed
+## 🔐 Features
 
-✅ Listing management completed
+- JWT Authentication  
+- Role-Based Authorization  
+- Listing Management  
+- Media Upload & Storage  
+- Agent Contact Management  
 
-✅ Media management core features implemented
+---
 
-🔄 Agent management in progress
+## ⚙️ Tech Stack
 
-⏳ Preview and delivery features planned
+- ASP.NET Core (.NET 8)
+- Entity Framework Core
+- SQL Server
+- AutoMapper
+- FluentValidation
+- Swagger
 
-🔮 Future Enhancements
+---
 
-Listing preview aggregation layer
+## 📈 Status
 
-Cloud storage integration (e.g., Azure Blob Storage)
+- Auth Module ✅  
+- Listing Module ✅  
+- Media Module ✅  
+- Agent Module 🔄  
+- Preview Module ⏳  
 
-Media selection and presentation logic
+---
 
-File packaging and delivery
+## 👤 Author
 
-Unit testing and performance optimization
-
-👤 Author
-
-Medea Lin
-Bachelor of Advanced Computing — University of Sydney
-Major: Software Development
+Medea Lin  
+University of Sydney — Software Development  
