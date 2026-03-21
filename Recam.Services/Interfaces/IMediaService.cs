@@ -13,4 +13,6 @@ public interface IMediaService
     Task DeleteMediaAsync(Guid mediaId);
 
     Task SelectMediaAsync(Guid listingId, List<Guid> selectedMediaIds);
+    Task SetHeroAsync(Guid mediaId);
+    
 }

@@ -105,4 +105,24 @@ public class MediaService : IMediaService
 
         await _mediaRepository.SaveChangesAsync();
     }
+
+    public async Task SetHeroAsync(Guid mediaId)
+    {
+    var media = await _mediaRepository.GetByIdAsync(mediaId);
+
+    if (media == null)
+        throw new Exception("Media not found");
+
+    var mediaList = await _mediaRepository.GetByListingIdAsync(media.ListingCaseId);
+
+    foreach (var m in mediaList)
+    {
+        m.IsHero = false;
+    }
+
+    media.IsHero = true;
+    media.IsSelected = true;
+
+    await _mediaRepository.SaveChangesAsync();
+    }
 }
