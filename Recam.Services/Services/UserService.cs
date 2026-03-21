@@ -18,20 +18,27 @@ public class UserService : IUserService
     {
         var users = _userManager.Users.ToList();
 
-        var result = new List<UserDto>();
-
-        foreach (var user in users)
+        return users.Select(u => new UserDto
         {
-            var roles = await _userManager.GetRolesAsync(user);
+            Id = u.Id,
+            Email = u.Email!,
+            Role = "", // 你之前怎么处理 role 就保持原样
+        }).ToList();
+    }
 
-            result.Add(new UserDto
-            {
-                Id = user.Id,
-                Email = user.Email!,
-                Role = roles.FirstOrDefault() ?? "None"
-            });
-        }
+    public async Task<bool> ChangePasswordAsync(string userId, ChangePasswordRequest request)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
 
-        return result;
+        if (user == null)
+            return false;
+
+        var result = await _userManager.ChangePasswordAsync(
+            user,
+            request.CurrentPassword,
+            request.NewPassword
+        );
+
+        return result.Succeeded;
     }
 }
