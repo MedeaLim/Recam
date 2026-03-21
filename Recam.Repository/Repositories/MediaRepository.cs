@@ -46,4 +46,9 @@ public class MediaRepository : IMediaRepository
         _context.MediaAssets.Update(media);
         await _context.SaveChangesAsync();
     }
+
+    public async Task SaveChangesAsync()
+{
+    await _context.SaveChangesAsync();
+}
 }

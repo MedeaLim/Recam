@@ -59,4 +59,11 @@ public class MediaController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPost("/listings/{id}/select-media")]
+    public async Task<IActionResult> SelectMedia(Guid id, [FromBody] SelectMediaRequestDto request)
+    {
+        await _mediaService.SelectMediaAsync(id, request.MediaIds);
+        return Ok();
+    }
 }

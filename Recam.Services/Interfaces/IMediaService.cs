@@ -11,4 +11,6 @@ public interface IMediaService
     Task<List<MediaResponseDto>> GetAllMediaAsync();
 
     Task DeleteMediaAsync(Guid mediaId);
+
+    Task SelectMediaAsync(Guid listingId, List<Guid> selectedMediaIds);
 }

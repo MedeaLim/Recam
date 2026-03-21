@@ -13,4 +13,5 @@ public interface IMediaRepository
     Task AddAsync(MediaAsset media);
 
     Task DeleteAsync(MediaAsset media);
+    Task SaveChangesAsync();
 }
