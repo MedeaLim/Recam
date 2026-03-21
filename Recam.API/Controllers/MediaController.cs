@@ -66,4 +66,11 @@ public class MediaController : ControllerBase
         await _mediaService.SelectMediaAsync(id, request.MediaIds);
         return Ok();
     }
+
+    [HttpPost("{id}/set-hero")]
+    public async Task<IActionResult> SetHero(Guid id)
+    {
+        await _mediaService.SetHeroAsync(id);
+        return Ok();
+    }
 }
