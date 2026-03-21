@@ -1,7 +1,5 @@
+using Recam.Models.Entities;
 using Recam.Models.Enums;
-
-namespace Recam.Models.Entities;
-
 public class MediaAsset
 {
     public Guid Id { get; set; }
@@ -20,9 +18,11 @@ public class MediaAsset
 
     public MediaType MediaType { get; set; }
 
+    public bool IsSelected { get; set; } = false; // ⭐ 新增
+
     public bool IsHero { get; set; }
 
-    public bool IsDeleted { get; set; } = false;   // ⭐ 必须有这一行
+    public bool IsDeleted { get; set; } = false;
 
     public DateTime CreatedAt { get; set; }
 
