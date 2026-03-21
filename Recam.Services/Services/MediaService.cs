@@ -11,7 +11,6 @@ public class MediaService : IMediaService
     private readonly IMediaRepository _mediaRepository;
     private readonly IMediaStorageService _storageService;
 
-    // ⚠️ 先写死，后面可以放 config
     private readonly string _baseUrl = "https://localhost:5001";
 
     public MediaService(
@@ -60,7 +59,7 @@ public class MediaService : IMediaService
         var mediaList = await _mediaRepository.GetByListingIdAsync(listingId);
 
         return mediaList
-            .Where(m => !m.IsDeleted) // ✅ 过滤软删除
+            .Where(m => !m.IsDeleted)
             .Select(m => new MediaResponseDto
             {
                 Id = m.Id,
@@ -75,7 +74,7 @@ public class MediaService : IMediaService
         var mediaList = await _mediaRepository.GetAllAsync();
 
         return mediaList
-            .Where(m => !m.IsDeleted) // ✅ 同样过滤
+            .Where(m => !m.IsDeleted)
             .Select(m => new MediaResponseDto
             {
                 Id = m.Id,
@@ -93,5 +92,17 @@ public class MediaService : IMediaService
             throw new Exception("Media not found");
 
         await _mediaRepository.DeleteAsync(media);
+    }
+
+    public async Task SelectMediaAsync(Guid listingId, List<Guid> selectedMediaIds)
+    {
+        var mediaList = await _mediaRepository.GetByListingIdAsync(listingId);
+
+        foreach (var media in mediaList)
+        {
+            media.IsSelected = selectedMediaIds.Contains(media.Id);
+        }
+
+        await _mediaRepository.SaveChangesAsync();
     }
 }
