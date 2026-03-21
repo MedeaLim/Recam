@@ -73,4 +73,11 @@ public class MediaController : ControllerBase
         await _mediaService.SetHeroAsync(id);
         return Ok();
     }
+
+    [HttpGet("/listings/{id}/final-media")]
+    public async Task<IActionResult> GetFinalMedia(Guid id)
+    {
+    var result = await _mediaService.GetFinalMediaAsync(id);
+    return Ok(result);
+    }
 }
