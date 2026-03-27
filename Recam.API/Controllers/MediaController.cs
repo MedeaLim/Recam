@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Recam.Models.Enums;
 using Recam.Service.DTOs.Media;
 using Recam.Service.Interfaces;
-
 namespace Recam.API.Controllers;
 
 [ApiController]
@@ -79,5 +78,13 @@ public class MediaController : ControllerBase
     {
     var result = await _mediaService.GetFinalMediaAsync(id);
     return Ok(result);
+    }
+
+    [HttpGet("media/{id}/download")]
+    public async Task<IActionResult> DownloadMedia(Guid id)
+    {
+        var result = await _mediaService.GetMediaDownloadAsync(id);
+
+        return File(result.FileStream, result.ContentType, result.FileName);
     }
 }
