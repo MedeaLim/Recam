@@ -50,4 +50,12 @@ public class UsersController : ControllerBase
 
         return Ok("Password updated successfully");
     }
+
+    [HttpGet]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        var users = await _userService.GetAllUsersAsync();
+        return Ok(users);
+    }
 }
