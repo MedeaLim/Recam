@@ -15,4 +15,6 @@ public class Agent
     public string CompanyName { get; set; } = string.Empty;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public string? AdminId { get; set; } 
 }

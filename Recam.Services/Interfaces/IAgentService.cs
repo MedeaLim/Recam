@@ -9,4 +9,5 @@ public interface IAgentService
     Task<List<Agent>> GetAllAsync();
 
     Task<Guid> CreateAgentAsync(CreateAgentRequest request);
+    Task AssignAdminAsync(Guid agentId, string adminId);
 }
