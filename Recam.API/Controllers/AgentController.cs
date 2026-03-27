@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Recam.Services.Interfaces;
+using Recam.Services.DTOs.Agent;
 
 namespace Recam.API.Controllers;
 
 [ApiController]
 [Route("api/agent")]
-[Authorize(Roles = "Agent,Admin")]
+[Authorize(Roles = "Admin")]
 public class AgentController : ControllerBase
 {
     private readonly IAgentService _agentService;
@@ -41,5 +42,18 @@ public class AgentController : ControllerBase
         var agents = await _agentService.GetAllAsync();
 
         return Ok(agents);
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> CreateAgent(CreateAgentRequest request)
+    {
+        var agentId = await _agentService.CreateAgentAsync(request);
+
+        return Ok(new
+        {
+            message = "Agent created successfully",
+            agentId = agentId
+        });
     }
 }
