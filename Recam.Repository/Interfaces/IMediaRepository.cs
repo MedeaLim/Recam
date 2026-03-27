@@ -4,14 +4,10 @@ namespace Recam.Repository.Interfaces;
 
 public interface IMediaRepository
 {
-    Task<List<MediaAsset>> GetAllAsync();
-
-    Task<List<MediaAsset>> GetByListingIdAsync(Guid listingId);
-
-    Task<MediaAsset?> GetByIdAsync(Guid id);
-
     Task AddAsync(MediaAsset media);
-
+    Task<MediaAsset?> GetByIdAsync(Guid id);
+    Task<List<MediaAsset>> GetByListingIdAsync(Guid listingId);
+    Task<List<MediaAsset>> GetAllAsync();
     Task DeleteAsync(MediaAsset media);
     Task SaveChangesAsync();
 }

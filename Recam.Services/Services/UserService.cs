@@ -18,12 +18,21 @@ public class UserService : IUserService
     {
         var users = _userManager.Users.ToList();
 
-        return users.Select(u => new UserDto
+        var result = new List<UserDto>();
+
+        foreach (var user in users)
         {
-            Id = u.Id,
-            Email = u.Email!,
-            Role = "", // 你之前怎么处理 role 就保持原样
-        }).ToList();
+            var roles = await _userManager.GetRolesAsync(user);
+
+            result.Add(new UserDto
+            {
+                Id = user.Id,
+                Email = user.Email!,
+                Role = roles.FirstOrDefault() ?? "Unknown"
+            });
+        }
+
+        return result;
     }
 
     public async Task<bool> ChangePasswordAsync(string userId, ChangePasswordRequest request)

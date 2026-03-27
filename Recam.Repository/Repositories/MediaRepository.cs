@@ -14,41 +14,37 @@ public class MediaRepository : IMediaRepository
         _context = context;
     }
 
-    public async Task<List<MediaAsset>> GetAllAsync()
-    {
-        return await _context.MediaAssets
-            .Where(m => !m.IsDeleted)
-            .ToListAsync();
-    }
-
-    public async Task<List<MediaAsset>> GetByListingIdAsync(Guid listingId)
-    {
-        return await _context.MediaAssets
-            .Where(m => m.ListingCaseId == listingId && !m.IsDeleted)
-            .ToListAsync();
-    }
-
-    public async Task<MediaAsset?> GetByIdAsync(Guid id)
-    {
-        return await _context.MediaAssets
-            .FirstOrDefaultAsync(m => m.Id == id && !m.IsDeleted);
-    }
-
     public async Task AddAsync(MediaAsset media)
     {
         await _context.MediaAssets.AddAsync(media);
         await _context.SaveChangesAsync();
     }
 
+    public async Task<MediaAsset?> GetByIdAsync(Guid id)
+    {
+        return await _context.MediaAssets.FirstOrDefaultAsync(m => m.Id == id);
+    }
+
+    public async Task<List<MediaAsset>> GetByListingIdAsync(Guid listingId)
+    {
+        return await _context.MediaAssets
+            .Where(m => m.ListingCaseId == listingId)
+            .ToListAsync();
+    }
+
+    public async Task<List<MediaAsset>> GetAllAsync()
+    {
+        return await _context.MediaAssets.ToListAsync();
+    }
+
     public async Task DeleteAsync(MediaAsset media)
     {
         media.IsDeleted = true;
-        _context.MediaAssets.Update(media);
         await _context.SaveChangesAsync();
     }
 
     public async Task SaveChangesAsync()
-{
-    await _context.SaveChangesAsync();
-}
+    {
+        await _context.SaveChangesAsync();
+    }
 }

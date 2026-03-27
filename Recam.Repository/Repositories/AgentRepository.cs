@@ -24,4 +24,10 @@ public class AgentRepository : IAgentRepository
     {
         return await _context.Agents.ToListAsync();
     }
+
+    public async Task AddAsync(Agent agent)
+    {
+        _context.Agents.Add(agent);
+        await _context.SaveChangesAsync();
+    }
 }

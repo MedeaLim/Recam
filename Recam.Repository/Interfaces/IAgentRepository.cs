@@ -5,6 +5,6 @@ namespace Recam.Repository.Interfaces;
 public interface IAgentRepository
 {
     Task<Agent?> GetByEmailAsync(string email);
-
     Task<List<Agent>> GetAllAsync();
+    Task AddAsync(Agent agent);
 }
