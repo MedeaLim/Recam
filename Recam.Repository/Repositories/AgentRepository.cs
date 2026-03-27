@@ -30,4 +30,15 @@ public class AgentRepository : IAgentRepository
         _context.Agents.Add(agent);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<Agent?> GetByIdAsync(Guid id)
+    {
+    return await _context.Agents.FindAsync(id);
+    }
+
+    public async Task UpdateAsync(Agent agent)
+    {
+        _context.Agents.Update(agent);
+        await _context.SaveChangesAsync();
+    }
 }

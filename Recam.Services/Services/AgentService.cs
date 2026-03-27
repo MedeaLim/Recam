@@ -29,7 +29,6 @@ public class AgentService : IAgentService
         return await _agentRepository.GetAllAsync();
     }
 
-    // 🔥 RECAM-82 核心
     public async Task<Guid> CreateAgentAsync(CreateAgentRequest request)
     {
         // 1️⃣ 创建 Identity User（登录用）
@@ -65,5 +64,17 @@ public class AgentService : IAgentService
         await _agentRepository.AddAsync(agent);
 
         return agent.Id;
+    }
+
+    public async Task AssignAdminAsync(Guid agentId, string adminId)
+    {
+    var agent = await _agentRepository.GetByIdAsync(agentId);
+
+    if (agent == null)
+        throw new Exception("Agent not found");
+
+    agent.AdminId = adminId;
+
+    await _agentRepository.UpdateAsync(agent);
     }
 }

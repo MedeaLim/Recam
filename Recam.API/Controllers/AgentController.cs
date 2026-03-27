@@ -7,7 +7,7 @@ namespace Recam.API.Controllers;
 
 [ApiController]
 [Route("api/agent")]
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Agent,Admin")]
 public class AgentController : ControllerBase
 {
     private readonly IAgentService _agentService;
@@ -55,5 +55,19 @@ public class AgentController : ControllerBase
             message = "Agent created successfully",
             agentId = agentId
         });
+    }
+
+    [HttpPost("{id}/assign-admin")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> AssignAdmin(Guid id)
+    {
+        var adminId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        if (adminId == null)
+            return Unauthorized();
+
+        await _agentService.AssignAdminAsync(id, adminId);
+
+        return Ok("Agent assigned to admin successfully");
     }
 }
