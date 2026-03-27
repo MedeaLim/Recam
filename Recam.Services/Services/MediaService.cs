@@ -3,6 +3,7 @@ using Recam.Repository.Interfaces;
 using Recam.Service.DTOs.Media;
 using Recam.Service.Interfaces;
 using Recam.Services.Interfaces;
+using Recam.Services.DTOs.Media;
 
 namespace Recam.Service.Services;
 
@@ -108,36 +109,54 @@ public class MediaService : IMediaService
 
     public async Task SetHeroAsync(Guid mediaId)
     {
-    var media = await _mediaRepository.GetByIdAsync(mediaId);
+        var media = await _mediaRepository.GetByIdAsync(mediaId);
 
-    if (media == null)
-        throw new Exception("Media not found");
+        if (media == null)
+            throw new Exception("Media not found");
 
-    var mediaList = await _mediaRepository.GetByListingIdAsync(media.ListingCaseId);
+        var mediaList = await _mediaRepository.GetByListingIdAsync(media.ListingCaseId);
 
-    foreach (var m in mediaList)
-    {
-        m.IsHero = false;
-    }
+        foreach (var m in mediaList)
+        {
+            m.IsHero = false;
+        }
 
-    media.IsHero = true;
-    media.IsSelected = true;
+        media.IsHero = true;
+        media.IsSelected = true;
 
-    await _mediaRepository.SaveChangesAsync();
+        await _mediaRepository.SaveChangesAsync();
     }
 
     public async Task<List<MediaResponseDto>> GetFinalMediaAsync(Guid listingId)
     {
-    var mediaList = await _mediaRepository.GetByListingIdAsync(listingId);
+        var mediaList = await _mediaRepository.GetByListingIdAsync(listingId);
 
-    return mediaList
-        .Where(m => m.IsSelected && !m.IsDeleted)
-        .Select(m => new MediaResponseDto
+        return mediaList
+            .Where(m => m.IsSelected && !m.IsDeleted)
+            .Select(m => new MediaResponseDto
+            {
+                Id = m.Id,
+                Url = $"{_baseUrl}/{m.StoragePath}",
+                MediaType = m.MediaType.ToString()
+            })
+            .ToList();
+    }
+
+    // ✅ 下载单个媒体（RECAM-91）
+    public async Task<DownloadResult> GetMediaDownloadAsync(Guid mediaId)
+    {
+        var media = await _mediaRepository.GetByIdAsync(mediaId);
+
+        if (media == null)
+            throw new Exception("Media not found");
+
+        var stream = await _storageService.GetFileStreamAsync(media.StoragePath);
+
+        return new DownloadResult
         {
-            Id = m.Id,
-            Url = $"{_baseUrl}/{m.StoragePath}",
-            MediaType = m.MediaType.ToString()
-        })
-        .ToList();
+            FileStream = stream,
+            ContentType = media.ContentType,
+            FileName = media.OriginalFileName
+        };
     }
 }

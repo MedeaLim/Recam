@@ -40,4 +40,14 @@ public class LocalMediaStorageService : IMediaStorageService
             new FileStream(storagePath, FileMode.Open, FileAccess.Read)
         );
     }
+
+    public async Task<Stream> GetFileStreamAsync(string storagePath)
+    {
+    if (!File.Exists(storagePath))
+        throw new FileNotFoundException("File not found", storagePath);
+
+    return await Task.FromResult(
+        new FileStream(storagePath, FileMode.Open, FileAccess.Read)
+    );
+    }
 }

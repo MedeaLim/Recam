@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace Recam.Services.Interfaces;
 
 public interface IMediaStorageService
@@ -7,4 +9,6 @@ public interface IMediaStorageService
     Task DeleteAsync(string storagePath);
 
     Task<Stream> GetFileAsync(string storagePath);
+
+    Task<Stream> GetFileStreamAsync(string storagePath);
 }
