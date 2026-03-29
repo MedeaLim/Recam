@@ -16,9 +16,12 @@ public class ListingController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(
+        string? status,
+        string? keyword,
+        string? propertyType)
     {
-        var listings = await _listingService.GetAllListingsAsync();
+        var listings = await _listingService.GetAllListingsAsync(status, keyword, propertyType);
         return Ok(listings);
     }
 
