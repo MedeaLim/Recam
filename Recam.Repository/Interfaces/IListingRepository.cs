@@ -4,10 +4,12 @@ namespace Recam.Repository.Interfaces;
 
 public interface IListingRepository
 {
-    Task<IEnumerable<ListingCase>> GetAllAsync(
+    Task<object> GetAllAsync(
         string? status,
         string? keyword,
-        string? propertyType);
+        string? propertyType,
+        int page,
+        int pageSize);
 
     Task<ListingCase?> GetByIdAsync(Guid id);
 
