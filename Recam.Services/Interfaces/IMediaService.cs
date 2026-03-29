@@ -20,4 +20,5 @@ public interface IMediaService
     Task<List<MediaResponseDto>> GetFinalMediaAsync(Guid listingId);
 
     Task<DownloadResult> GetMediaDownloadAsync(Guid mediaId);
+    Task<DownloadResult> GetListingZipAsync(Guid listingId);
 }

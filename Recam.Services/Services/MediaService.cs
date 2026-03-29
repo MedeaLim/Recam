@@ -159,4 +159,36 @@ public class MediaService : IMediaService
             FileName = media.OriginalFileName
         };
     }
+
+    public async Task<DownloadResult> GetListingZipAsync(Guid listingId)
+    {
+    var mediaList = await _mediaRepository.GetByListingIdAsync(listingId);
+
+    if (mediaList == null || !mediaList.Any())
+        throw new Exception("No media found for this listing");
+
+    var memoryStream = new MemoryStream();
+
+    using (var zip = new System.IO.Compression.ZipArchive(memoryStream, System.IO.Compression.ZipArchiveMode.Create, true))
+    {
+        foreach (var media in mediaList.Where(m => !m.IsDeleted))
+        {
+            var fileStream = await _storageService.GetFileStreamAsync(media.StoragePath);
+
+            var entry = zip.CreateEntry(media.OriginalFileName);
+
+            using var entryStream = entry.Open();
+            await fileStream.CopyToAsync(entryStream);
+        }
+    }
+
+    memoryStream.Position = 0;
+
+    return new DownloadResult
+    {
+        FileStream = memoryStream,
+        ContentType = "application/zip",
+        FileName = $"listing-{listingId}.zip"
+    };
+    }
 }

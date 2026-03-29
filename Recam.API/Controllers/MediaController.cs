@@ -87,4 +87,12 @@ public class MediaController : ControllerBase
 
         return File(result.FileStream, result.ContentType, result.FileName);
     }
+
+    [HttpGet("/listings/{id}/download")]
+    public async Task<IActionResult> DownloadListing(Guid id)
+    {
+        var result = await _mediaService.GetListingZipAsync(id);
+
+        return File(result.FileStream, result.ContentType, result.FileName);
+    }
 }
