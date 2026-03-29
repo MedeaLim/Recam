@@ -4,6 +4,7 @@ using Recam.Models.Entities;
 using Recam.Repository.Interfaces;
 using Recam.Models.Enums; 
 
+
 namespace Recam.Repository.Repositories;
 
 public class ListingRepository : IListingRepository
@@ -15,26 +16,27 @@ public class ListingRepository : IListingRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<ListingCase>> GetAllAsync(
+    public async Task<object> GetAllAsync(
         string? status,
         string? keyword,
-        string? propertyType)
+        string? propertyType,
+        int page,
+        int pageSize)
     {
         var query = _context.ListingCases.AsQueryable();
-
-        // 1. Filter by status
+        // Status (string)
         if (!string.IsNullOrEmpty(status))
         {
-            query = query.Where(x => x.Status == status);
+            query = query.Where(x => x.Status.ToLower() == status.ToLower());
         }
 
-        // 2. Filter by address keyword
+        // Keyword
         if (!string.IsNullOrEmpty(keyword))
         {
             query = query.Where(x => x.Address.Contains(keyword));
         }
 
-        // 3. Filter by property type
+        // PropertyType (enum)
         if (!string.IsNullOrEmpty(propertyType))
         {
             if (Enum.TryParse<PropertyType>(propertyType, true, out var parsedType))
@@ -43,11 +45,24 @@ public class ListingRepository : IListingRepository
             }
         }
 
-        
+        // ===== Total Count =====
+        var totalCount = await query.CountAsync();
 
-        return await query.ToListAsync();
+        // ===== Pagination =====
+        var data = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        // ===== Return =====
+        return new
+        {
+            totalCount,
+            page,
+            pageSize,
+            data
+        };
     }
-
     public async Task<ListingCase?> GetByIdAsync(Guid id)
     {
         return await _context.ListingCases.FirstOrDefaultAsync(x => x.Id == id);

@@ -19,9 +19,17 @@ public class ListingController : ControllerBase
     public async Task<IActionResult> GetAll(
         string? status,
         string? keyword,
-        string? propertyType)
+        string? propertyType,
+        int page = 1,
+        int pageSize = 10)
     {
-        var listings = await _listingService.GetAllListingsAsync(status, keyword, propertyType);
+        var listings = await _listingService.GetAllListingsAsync(
+            status,
+            keyword,
+            propertyType,
+            page,
+            pageSize);
+
         return Ok(listings);
     }
 

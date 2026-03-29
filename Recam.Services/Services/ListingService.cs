@@ -13,12 +13,15 @@ public class ListingService : IListingService
         _listingRepository = listingRepository;
     }
 
-    public async Task<IEnumerable<ListingCase>> GetAllListingsAsync(
+    public async Task<object> GetAllListingsAsync(
         string? status,
         string? keyword,
-        string? propertyType)
+        string? propertyType,
+        int page,
+        int pageSize)
     {
-        return await _listingRepository.GetAllAsync(status, keyword, propertyType);
+        return await _listingRepository.GetAllAsync(
+            status, keyword, propertyType, page, pageSize);
     }
 
     public async Task<ListingCase?> GetListingByIdAsync(Guid id)
