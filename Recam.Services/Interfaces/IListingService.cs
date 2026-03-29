@@ -4,7 +4,10 @@ namespace Recam.Services.Interfaces;
 
 public interface IListingService
 {
-    Task<List<ListingCase>> GetAllListingsAsync();
+    Task<IEnumerable<ListingCase>> GetAllListingsAsync(
+        string? status,
+        string? keyword,
+        string? propertyType);
 
     Task<ListingCase?> GetListingByIdAsync(Guid id);
 

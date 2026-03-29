@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Recam.DataAccess.Data;
 using Recam.Models.Entities;
 using Recam.Repository.Interfaces;
+using Recam.Models.Enums; 
 
 namespace Recam.Repository.Repositories;
 
@@ -14,9 +15,37 @@ public class ListingRepository : IListingRepository
         _context = context;
     }
 
-    public async Task<List<ListingCase>> GetAllAsync()
+    public async Task<IEnumerable<ListingCase>> GetAllAsync(
+        string? status,
+        string? keyword,
+        string? propertyType)
     {
-        return await _context.ListingCases.ToListAsync();
+        var query = _context.ListingCases.AsQueryable();
+
+        // 1. Filter by status
+        if (!string.IsNullOrEmpty(status))
+        {
+            query = query.Where(x => x.Status == status);
+        }
+
+        // 2. Filter by address keyword
+        if (!string.IsNullOrEmpty(keyword))
+        {
+            query = query.Where(x => x.Address.Contains(keyword));
+        }
+
+        // 3. Filter by property type
+        if (!string.IsNullOrEmpty(propertyType))
+        {
+            if (Enum.TryParse<PropertyType>(propertyType, true, out var parsedType))
+            {
+                query = query.Where(x => x.PropertyType == parsedType);
+            }
+        }
+
+        
+
+        return await query.ToListAsync();
     }
 
     public async Task<ListingCase?> GetByIdAsync(Guid id)
