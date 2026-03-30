@@ -14,9 +14,21 @@ public class AzureBlobStorageService : IBlobStorageService
         throw new NotImplementedException();
     }
 
-    public Task<Stream> DownloadAsync(string fileName)
+    public async Task<Stream> DownloadAsync(string fileName)
     {
-        throw new NotImplementedException();
+        var blobServiceClient = new BlobServiceClient("你的ConnectionString");
+
+        var containerClient = blobServiceClient.GetBlobContainerClient("recam-media");
+
+        var blobClient = containerClient.GetBlobClient(fileName);
+
+        var memoryStream = new MemoryStream();
+
+        await blobClient.DownloadToAsync(memoryStream);
+
+        memoryStream.Position = 0;
+
+        return memoryStream;
     }
 
     public Task DeleteAsync(string fileName)
