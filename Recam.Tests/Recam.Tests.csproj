@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Recam.Services\Recam.Services.csproj" />
+    <ProjectReference Include="..\Recam.API\Recam.API.csproj" />
   </ItemGroup>
 
 </Project>
