@@ -10,23 +10,23 @@ namespace Recam.Service.Services;
 public class MediaService : IMediaService
 {
     private readonly IMediaRepository _mediaRepository;
-    private readonly IMediaStorageService _storageService;
+    private readonly IBlobStorageService _blobStorageService;
 
     private readonly string _baseUrl = "https://localhost:5001";
 
     public MediaService(
         IMediaRepository mediaRepository,
-        IMediaStorageService storageService)
+        IBlobStorageService blobStorageService)
     {
         _mediaRepository = mediaRepository;
-        _storageService = storageService;
+        _blobStorageService = blobStorageService;
     }
 
     public async Task<MediaResponseDto> UploadMediaAsync(Guid listingId, UploadMediaRequestDto request)
     {
         var fileName = Guid.NewGuid() + Path.GetExtension(request.FileName);
 
-        var storagePath = await _storageService.UploadAsync(
+        var storagePath = await _blobStorageService.UploadAsync(
             request.FileStream,
             fileName
         );
@@ -50,7 +50,7 @@ public class MediaService : IMediaService
         return new MediaResponseDto
         {
             Id = media.Id,
-            Url = $"{_baseUrl}/{media.StoragePath}",
+            Url = media.StoragePath,
             MediaType = media.MediaType.ToString()
         };
     }
@@ -150,7 +150,7 @@ public class MediaService : IMediaService
         if (media == null)
             throw new Exception("Media not found");
 
-        var stream = await _storageService.GetFileStreamAsync(media.StoragePath);
+        var stream = await _blobStorageService.DownloadAsync(media.FileName);
 
         return new DownloadResult
         {
@@ -173,7 +173,7 @@ public class MediaService : IMediaService
     {
         foreach (var media in mediaList.Where(m => !m.IsDeleted))
         {
-            var fileStream = await _storageService.GetFileStreamAsync(media.StoragePath);
+            var fileStream = await _blobStorageService.DownloadAsync(media.FileName);
 
             var entry = zip.CreateEntry(media.OriginalFileName);
 
