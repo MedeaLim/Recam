@@ -129,6 +129,8 @@ builder.Services.AddScoped<ICaseContactService, CaseContactService>();
 builder.Services.AddScoped<IAgentRepository, AgentRepository>();
 builder.Services.AddScoped<IAgentService, AgentService>();
 
+builder.Services.AddScoped<IBlobStorageService, AzureBlobStorageService>();
+
 // ============================
 // Swagger
 // ============================
